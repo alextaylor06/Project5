@@ -15,6 +15,7 @@ main.obj: A:/ti/ccsv8/tools/compiler/ti-cgt-msp430_18.1.4.LTS/include/stdio.h
 main.obj: A:/ti/ccsv8/tools/compiler/ti-cgt-msp430_18.1.4.LTS/include/stdarg.h
 main.obj: A:/ti/ccsv8/tools/compiler/ti-cgt-msp430_18.1.4.LTS/include/sys/_types.h
 main.obj: A:/ti/ccsv8/tools/compiler/ti-cgt-msp430_18.1.4.LTS/include/machine/_types.h
+main.obj: ../RTOS.h
 
 ../main.c: 
 A:/ti/ccsv8/ccs_base/msp430/include/msp430.h: 
@@ -31,3 +32,4 @@ A:/ti/ccsv8/tools/compiler/ti-cgt-msp430_18.1.4.LTS/include/stdio.h:
 A:/ti/ccsv8/tools/compiler/ti-cgt-msp430_18.1.4.LTS/include/stdarg.h: 
 A:/ti/ccsv8/tools/compiler/ti-cgt-msp430_18.1.4.LTS/include/sys/_types.h: 
 A:/ti/ccsv8/tools/compiler/ti-cgt-msp430_18.1.4.LTS/include/machine/_types.h: 
+../RTOS.h: 

@@ -8,6 +8,9 @@ SHELL = cmd.exe
 CMD_SRCS += \
 ../lnk_msp430fr6989.cmd 
 
+ASM_SRCS += \
+../scheduler.asm 
+
 C_SRCS += \
 ../RTOS.c \
 ../lcd.c \
@@ -21,21 +24,32 @@ C_DEPS += \
 OBJS += \
 ./RTOS.obj \
 ./lcd.obj \
-./main.obj 
+./main.obj \
+./scheduler.obj 
+
+ASM_DEPS += \
+./scheduler.d 
 
 OBJS__QUOTED += \
 "RTOS.obj" \
 "lcd.obj" \
-"main.obj" 
+"main.obj" \
+"scheduler.obj" 
 
 C_DEPS__QUOTED += \
 "RTOS.d" \
 "lcd.d" \
 "main.d" 
 
+ASM_DEPS__QUOTED += \
+"scheduler.d" 
+
 C_SRCS__QUOTED += \
 "../RTOS.c" \
 "../lcd.c" \
 "../main.c" 
+
+ASM_SRCS__QUOTED += \
+"../scheduler.asm" 
 
 

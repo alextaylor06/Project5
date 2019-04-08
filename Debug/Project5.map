@@ -1,10 +1,10 @@
 ******************************************************************************
                   MSP430 Linker PC v18.1.4                     
 ******************************************************************************
->> Linked Wed Apr  3 08:03:43 2019
+>> Linked Mon Apr  8 08:22:04 2019
 
 OUTPUT FILE NAME:   <Project5.out>
-ENTRY POINT SYMBOL: "_c_int00_noargs_mpu"  address: 00004400
+ENTRY POINT SYMBOL: "_c_int00_noargs_mpu"  address: 00004800
 
 
 MEMORY CONFIGURATION
@@ -18,8 +18,8 @@ MEMORY CONFIGURATION
   INFOC                 00001880   00000080  00000000  00000080  RWIX
   INFOB                 00001900   00000080  00000000  00000080  RWIX
   INFOA                 00001980   00000080  00000000  00000080  RWIX
-  RAM                   00001c00   00000800  000000a2  0000075e  RWIX
-  FRAM                  00004400   0000bb80  0000003e  0000bb42  RWIX
+  RAM                   00001c00   00000800  000002ba  00000546  RWIX
+  FRAM                  00004400   0000bb80  00000466  0000b71a  RWIX
   JTAGSIGNATURE         0000ff80   00000004  00000004  00000000  RWIX  ffff 
   BSLSIGNATURE          0000ff84   00000004  00000004  00000000  RWIX  ffff 
   IPESIGNATURE          0000ff88   00000008  00000008  00000000  RWIX  ffff 
@@ -79,7 +79,7 @@ MEMORY CONFIGURATION
   INT53                 0000fffa   00000002  00000002  00000000  RWIX
   INT54                 0000fffc   00000002  00000002  00000000  RWIX
   RESET                 0000fffe   00000002  00000002  00000000  RWIX
-  FRAM2                 00010000   00014000  0000031e  00013ce2  RWIX
+  FRAM2                 00010000   00014000  0000046e  00013b92  RWIX
 
 
 SECTION ALLOCATION MAP
@@ -92,26 +92,30 @@ section   page    origin      length       input sections
 
 .cio       0    00004400    00000000     UNINITIALIZED
 
-.sysmem    0    00004400    00000000     UNINITIALIZED
+.sysmem    0    00004400    000000a0     UNINITIALIZED
+                  00004400    00000006     rts430x_lc_rd_eabi.lib : memory.c.obj (.sysmem)
+                  00004406    0000009a     --HOLE--
 
 .ipestruct 
-*          0    00004400    00000000     UNINITIALIZED
+*          0    00004800    00000000     UNINITIALIZED
 
-.ipe       0    00004400    00000000     UNINITIALIZED
+.ipe       0    00004800    00000000     UNINITIALIZED
 
 .ipe_const 
-*          0    00004400    00000000     UNINITIALIZED
+*          0    00004800    00000000     UNINITIALIZED
 
 .ipe:_isr 
-*          0    00004400    00000000     UNINITIALIZED
+*          0    00004800    00000000     UNINITIALIZED
 
 .ipe_vars 
-*          0    00004400    00000000     UNINITIALIZED
+*          0    00004800    00000000     UNINITIALIZED
 
-.cinit     0    00004428    00000016     
-                  00004428    00000008     (__TI_handler_table)
-                  00004430    00000006     (.cinit..data.load) [load image, compression = lzss]
-                  00004436    00000008     (__TI_cinit_table)
+.cinit     0    00004832    00000034     
+                  00004832    00000011     (.cinit..data.load) [load image, compression = lzss]
+                  00004843    00000001     --HOLE-- [fill = 0]
+                  00004844    0000000c     (__TI_handler_table)
+                  00004850    00000006     (.cinit..bss.load) [load image, compression = zero_init]
+                  00004856    00000010     (__TI_cinit_table)
 
 .binit     0    00004400    00000000     
 
@@ -119,12 +123,20 @@ section   page    origin      length       input sections
 *          0    00004400    00000000     UNINITIALIZED
 
 .text:_isr 
-*          0    00004400    00000028     
-                  00004400    00000020     rts430x_lc_rd_eabi.lib : boot.c.obj (.text:_isr:_c_int00_noargs_mpu)
-                  00004420    00000008                            : isr_trap.asm.obj (.text:_isr:__TI_ISR_TRAP)
+*          0    00004800    00000032     
+                  00004800    00000020     rts430x_lc_rd_eabi.lib : boot.c.obj (.text:_isr:_c_int00_noargs_mpu)
+                  00004820    0000000a     main.obj (.text:_isr:TImer2)
+                  0000482a    00000008     rts430x_lc_rd_eabi.lib : isr_trap.asm.obj (.text:_isr:__TI_ISR_TRAP)
 
-.data      0    00001c00    00000002     UNINITIALIZED
-                  00001c00    00000002     RTOS.obj (.data)
+.bss       0    00001c00    0000020a     UNINITIALIZED
+                  00001c00    00000200     (.common:myStack)
+                  00001e00    0000000a     rts430x_lc_rd_eabi.lib : memory.c.obj (.bss)
+
+.data      0    00001e0a    00000010     UNINITIALIZED
+                  00001e0a    00000006     RTOS.obj (.data)
+                  00001e10    00000004     rts430x_lc_rd_eabi.lib : _lock.c.obj (.data:_lock)
+                  00001e14    00000004                            : _lock.c.obj (.data:_unlock)
+                  00001e18    00000002                            : memory.c.obj (.data)
 
 .stack     0    00002360    000000a0     UNINITIALIZED
                   00002360    00000004     rts430x_lc_rd_eabi.lib : boot.c.obj (.stack)
@@ -182,7 +194,7 @@ TIMER1_A1
 
 TIMER1_A0 
 *          0    0000ffde    00000002     
-                  0000ffde    00000002     rts430x_lc_rd_eabi.lib : int39.asm.obj (.int39)
+                  0000ffde    00000002     main.obj (.int39)
 
 DMA        0    0000ffe0    00000002     
                   0000ffe0    00000002     rts430x_lc_rd_eabi.lib : int40.asm.obj (.int40)
@@ -236,39 +248,45 @@ SYSNMI     0    0000fffc    00000002
 .reset     0    0000fffe    00000002     
                   0000fffe    00000002     rts430x_lc_rd_eabi.lib : boot.c.obj (.reset)
 
-.text      0    00010000    0000031e     
-                  00010000    00000076     rts430x_lc_rd_eabi.lib : copy_decompress_lzss.c.obj (.text:decompress:lzss:__TI_decompress_lzss)
-                  00010076    00000068     lcd.obj (.text:initLCD)
-                  000100de    00000054     rts430x_lc_rd_eabi.lib : autoinit.c.obj (.text:__TI_auto_init_nobinit_nopinit_hold_wdt:__TI_auto_init_nobinit_nopinit_hold_wdt)
-                  00010132    0000003a     main.obj (.text:taskB)
-                  0001016c    00000036     main.obj (.text:taskA)
-                  000101a2    00000034     RTOS.obj (.text:RTOSsetup)
-                  000101d6    0000002e     lcd.obj (.text:lcdWriteCmd)
-                  00010204    0000002e     main.obj (.text:main)
-                  00010232    0000002c     MSPMPU_INIT_LIB_CCS_msp430_large_code_restricted_data.lib : mpu_init.o (.text:__mpu_init)
-                  0001025e    00000026     lcd.obj (.text:delay)
-                  00010284    00000020     RTOS.obj (.text:RTOSinitTask)
-                  000102a4    0000001e     lcd.obj (.text:getLowNib)
-                  000102c2    00000018     rts430x_lc_rd_eabi.lib : mult16_f5hw.asm.obj (.text)
-                  000102da    00000014                            : memcpy.c.obj (.text:memcpy)
-                  000102ee    00000012                            : copy_decompress_none.c.obj (.text:decompress:none:__TI_decompress_none)
-                  00010300    0000000e     lcd.obj (.text:lcdTriggerEN)
-                  0001030e    00000006     rts430x_lc_rd_eabi.lib : exit.c.obj (.text:abort)
-                  00010314    00000004                            : pre_init.c.obj (.text:_system_pre_init)
-                  00010318    00000002     RTOS.obj (.text:RTOSrun)
-                  0001031a    00000002     rts430x_lc_rd_eabi.lib : startup.c.obj (.text:_system_post_cinit)
-                  0001031c    00000002     main.obj (.text:taskC)
+.text      0    00010000    0000046e     
+                  00010000    000000bc     rts430x_lc_rd_eabi.lib : memory.c.obj (.text:malloc)
+                  000100bc    00000076                            : copy_decompress_lzss.c.obj (.text:decompress:lzss:__TI_decompress_lzss)
+                  00010132    00000068     lcd.obj (.text:initLCD)
+                  0001019a    00000054     rts430x_lc_rd_eabi.lib : autoinit.c.obj (.text:__TI_auto_init_nobinit_nopinit_hold_wdt:__TI_auto_init_nobinit_nopinit_hold_wdt)
+                  000101ee    00000046     RTOS.obj (.text:RTOSsetup)
+                  00010234    00000046     main.obj (.text:main)
+                  0001027a    00000042     rts430x_lc_rd_eabi.lib : memory.c.obj (.text:minit)
+                  000102bc    0000003a     main.obj (.text:taskB)
+                  000102f6    00000036     main.obj (.text:taskA)
+                  0001032c    0000002e     lcd.obj (.text:lcdWriteCmd)
+                  0001035a    0000002c     MSPMPU_INIT_LIB_CCS_msp430_large_code_restricted_data.lib : mpu_init.o (.text:__mpu_init)
+                  00010386    00000026     lcd.obj (.text:delay)
+                  000103ac    00000024     rts430x_lc_rd_eabi.lib : copy_zero_init.c.obj (.text:decompress:ZI:__TI_zero_init_nomemset:__TI_zero_init_nomemset)
+                  000103d0    00000020     RTOS.obj (.text:RTOSinitTask)
+                  000103f0    0000001e     lcd.obj (.text:getLowNib)
+                  0001040e    00000018     rts430x_lc_rd_eabi.lib : mult16_f5hw.asm.obj (.text)
+                  00010426    00000014                            : memcpy.c.obj (.text:memcpy)
+                  0001043a    00000012                            : copy_decompress_none.c.obj (.text:decompress:none:__TI_decompress_none)
+                  0001044c    0000000e     lcd.obj (.text:lcdTriggerEN)
+                  0001045a    00000006     rts430x_lc_rd_eabi.lib : exit.c.obj (.text:abort)
+                  00010460    00000004                            : pre_init.c.obj (.text:_system_pre_init)
+                  00010464    00000002     RTOS.obj (.text:RTOSrun)
+                  00010466    00000002     rts430x_lc_rd_eabi.lib : _lock.c.obj (.text:_nop)
+                  00010468    00000002                            : startup.c.obj (.text:_system_post_cinit)
+                  0001046a    00000002     scheduler.obj (.text)
+                  0001046c    00000002     main.obj (.text:taskC)
 
 MODULE SUMMARY
 
        Module                       code   ro data   rw data
        ------                       ----   -------   -------
     .\
+       RTOS.obj                     104    0         518    
        lcd.obj                      232    0         0      
-       main.obj                     160    0         0      
-       RTOS.obj                     86     0         2      
+       main.obj                     194    2         0      
+       scheduler.obj                2      0         0      
     +--+----------------------------+------+---------+---------+
-       Total:                       478    0         2      
+       Total:                       532    2         518    
                                                             
     A:\ti\ccsv8\ccs_base\msp430\lib\FR59xx\MSPMPU_INIT_LIB_CCS_msp430_large_code_restricted_data.lib
        mpu_init.o                   44     0         0      
@@ -276,12 +294,15 @@ MODULE SUMMARY
        Total:                       44     0         0      
                                                             
     A:\ti\ccsv8\tools\compiler\ti-cgt-msp430_18.1.4.LTS\lib\rts430x_lc_rd_eabi.lib
+       memory.c.obj                 254    0         12     
        copy_decompress_lzss.c.obj   118    0         0      
        autoinit.c.obj               84     0         0      
+       copy_zero_init.c.obj         36     0         0      
        boot.c.obj                   32     2         0      
        mult16_f5hw.asm.obj          24     0         0      
        memcpy.c.obj                 20     0         0      
        copy_decompress_none.c.obj   18     0         0      
+       _lock.c.obj                  2      0         8      
        isr_trap.asm.obj             8      0         0      
        exit.c.obj                   6      0         0      
        pre_init.c.obj               4      0         0      
@@ -297,7 +318,6 @@ MODULE SUMMARY
        int36.asm.obj                0      2         0      
        int37.asm.obj                0      2         0      
        int38.asm.obj                0      2         0      
-       int39.asm.obj                0      2         0      
        int40.asm.obj                0      2         0      
        int41.asm.obj                0      2         0      
        int42.asm.obj                0      2         0      
@@ -315,25 +335,28 @@ MODULE SUMMARY
        int54.asm.obj                0      2         0      
        startup.c.obj                2      0         0      
     +--+----------------------------+------+---------+---------+
-       Total:                       316    58        0      
+       Total:                       608    56        20     
                                                             
+       Heap:                        0      0         160    
        Stack:                       0      0         160    
-       Linker Generated:            0      22        0      
+       Linker Generated:            0      51        0      
     +--+----------------------------+------+---------+---------+
-       Grand Total:                 838    80        162    
+       Grand Total:                 1184   109       858    
 
 
 LINKER GENERATED COPY TABLES
 
-__TI_cinit_table @ 00004436 records: 1, size/record: 8, table size: 8
-	.data: load addr=00004430, load size=00000006 bytes, run addr=00001c00, run size=00000002 bytes, compression=lzss
+__TI_cinit_table @ 00004856 records: 2, size/record: 8, table size: 16
+	.data: load addr=00004832, load size=00000011 bytes, run addr=00001e0a, run size=00000010 bytes, compression=lzss
+	.bss: load addr=00004850, load size=00000006 bytes, run addr=00001c00, run size=0000020a bytes, compression=zero_init
 
 
 LINKER GENERATED HANDLER TABLE
 
-__TI_handler_table @ 00004428 records: 2, size/record: 4, table size: 8
-	index: 0, handler: __TI_decompress_lzss
-	index: 1, handler: __TI_decompress_none
+__TI_handler_table @ 00004844 records: 3, size/record: 4, table size: 12
+	index: 0, handler: __TI_zero_init
+	index: 1, handler: __TI_decompress_lzss
+	index: 2, handler: __TI_decompress_none
 
 
 GLOBAL SYMBOLS: SORTED ALPHABETICALLY BY Name 
@@ -597,7 +620,7 @@ address   name
 000009ce  AESAXIN_L                              
 000004be  BCD2BIN                                
 000004bc  BIN2BCD                                
-0001030e  C$$EXIT                                
+0001045a  C$$EXIT                                
 0000043e  CAPTIO0CTL                             
 0000043f  CAPTIO0CTL_H                           
 0000043e  CAPTIO0CTL_L                           
@@ -1475,9 +1498,9 @@ address   name
 000004b6  RTCYEAR                                
 000004b7  RTCYEAR_H                              
 000004b6  RTCYEAR_L                              
-00010284  RTOSinitTask                           
-00010318  RTOSrun                                
-000101a2  RTOSsetup                              
+000103d0  RTOSinitTask                           
+00010464  RTOSrun                                
+000101ee  RTOSsetup                              
 00000100  SFRIE1                                 
 00000101  SFRIE1_H                               
 00000100  SFRIE1_L                               
@@ -1577,6 +1600,7 @@ address   name
 000003e0  TB0EX0                                 
 000003ee  TB0IV                                  
 000003d0  TB0R                                   
+00004820  TImer2                                 
 000005d0  UCA0ABCTL                              
 000005c6  UCA0BRW                                
 000005c7  UCA0BRW_H                              
@@ -1740,14 +1764,15 @@ address   name
 0000015c  WDTCTL_L                               
 00002400  __STACK_END                            
 000000a0  __STACK_SIZE                           
-00004436  __TI_CINIT_Base                        
-0000443e  __TI_CINIT_Limit                       
-00004428  __TI_Handler_Table_Base                
-00004430  __TI_Handler_Table_Limit               
-00004420  __TI_ISR_TRAP                          
-000100de  __TI_auto_init_nobinit_nopinit_hold_wdt
-00010000  __TI_decompress_lzss                   
-000102ee  __TI_decompress_none                   
+000000a0  __SYSMEM_SIZE                          
+00004856  __TI_CINIT_Base                        
+00004866  __TI_CINIT_Limit                       
+00004844  __TI_Handler_Table_Base                
+00004850  __TI_Handler_Table_Limit               
+0000482a  __TI_ISR_TRAP                          
+0001019a  __TI_auto_init_nobinit_nopinit_hold_wdt
+000100bc  __TI_decompress_lzss                   
+0001043a  __TI_decompress_none                   
 0000ffc6  __TI_int27                             
 0000ffc8  __TI_int28                             
 0000ffca  __TI_int29                             
@@ -1779,35 +1804,45 @@ address   name
 ffffffff  __TI_pprof_out_hndl                    
 ffffffff  __TI_prof_data_size                    
 ffffffff  __TI_prof_data_start                   
+000103ac  __TI_zero_init_nomemset                
 ffffffff  __c_args__                             
 00000001  __mpu_enable                           
-00010232  __mpu_init                             
-000102c2  __mspabi_mpyi_f5hw                     
-00004400  _c_int00_noargs_mpu                    
+0001035a  __mpu_init                             
+0001040e  __mspabi_mpyi_f5hw                     
+00004800  _c_int00_noargs_mpu                    
+00001e10  _lock                                  
+00010466  _nop                                   
 0000fffe  _reset_vector                          
 00002360  _stack                                 
-0001031a  _system_post_cinit                     
-00010314  _system_pre_init                       
-0001030e  abort                                  
-0001025e  delay                                  
-00004400  fram_ipe_end                           
-00004400  fram_ipe_start                         
+00004400  _sys_memory                            
+00010468  _system_post_cinit                     
+00010460  _system_pre_init                       
+00001e14  _unlock                                
+0001045a  abort                                  
+00010386  delay                                  
+00004800  fram_ipe_end                           
+00004800  fram_ipe_start                         
 00004400  fram_rw_start                          
-00004400  fram_rx_start                          
-000102a4  getLowNib                              
-00010076  initLCD                                
-00010300  lcdTriggerEN                           
-000101d6  lcdWriteCmd                            
-00010204  main                                   
-000102da  memcpy                                 
+00004800  fram_rx_start                          
+000103f0  getLowNib                              
+00010132  initLCD                                
+0001044c  lcdTriggerEN                           
+0001032c  lcdWriteCmd                            
+00010234  main                                   
+00010000  malloc                                 
+00010426  memcpy                                 
+0001027a  minit                                  
 0000a501  mpu_ctl0_value                         
 00001513  mpu_sam_value                          
-00000440  mpu_segment_border1                    
-00000440  mpu_segment_border2                    
-0001016c  taskA                                  
-00010132  taskB                                  
-0001031c  taskC                                  
-00001c00  taskId                                 
+00000480  mpu_segment_border1                    
+00000480  mpu_segment_border2                    
+00001c00  myStack                                
+0001046a  scheduler                              
+00001e0a  stackP                                 
+000102f6  taskA                                  
+000102bc  taskB                                  
+0001046c  taskC                                  
+00001e0e  taskId                                 
 
 
 GLOBAL SYMBOLS: SORTED BY Symbol Address 
@@ -1816,6 +1851,7 @@ address   name
 -------   ----                                   
 00000001  __mpu_enable                           
 000000a0  __STACK_SIZE                           
+000000a0  __SYSMEM_SIZE                          
 00000100  SFRIE1                                 
 00000100  SFRIE1_L                               
 00000101  SFRIE1_H                               
@@ -2110,8 +2146,6 @@ address   name
 0000043e  CAPTIO0CTL_L                           
 0000043f  CAPTIO0CTL_H                           
 00000440  TA3CTL                                 
-00000440  mpu_segment_border1                    
-00000440  mpu_segment_border2                    
 00000442  TA3CCTL0                               
 00000444  TA3CCTL1                               
 00000446  TA3CCTL2                               
@@ -2128,6 +2162,8 @@ address   name
 0000047e  CAPTIO1CTL                             
 0000047e  CAPTIO1CTL_L                           
 0000047f  CAPTIO1CTL_H                           
+00000480  mpu_segment_border1                    
+00000480  mpu_segment_border2                    
 000004a0  RTCCTL0                                
 000004a0  RTCCTL0_L                              
 000004a1  RTCCTL0_H                              
@@ -3213,19 +3249,25 @@ address   name
 00000e7e  ESIRAM126                              
 00000e7f  ESIRAM127                              
 00001513  mpu_sam_value                          
-00001c00  taskId                                 
+00001c00  myStack                                
+00001e0a  stackP                                 
+00001e0e  taskId                                 
+00001e10  _lock                                  
+00001e14  _unlock                                
 00002360  _stack                                 
 00002400  __STACK_END                            
-00004400  _c_int00_noargs_mpu                    
-00004400  fram_ipe_end                           
-00004400  fram_ipe_start                         
+00004400  _sys_memory                            
 00004400  fram_rw_start                          
-00004400  fram_rx_start                          
-00004420  __TI_ISR_TRAP                          
-00004428  __TI_Handler_Table_Base                
-00004430  __TI_Handler_Table_Limit               
-00004436  __TI_CINIT_Base                        
-0000443e  __TI_CINIT_Limit                       
+00004800  _c_int00_noargs_mpu                    
+00004800  fram_ipe_end                           
+00004800  fram_ipe_start                         
+00004800  fram_rx_start                          
+00004820  TImer2                                 
+0000482a  __TI_ISR_TRAP                          
+00004844  __TI_Handler_Table_Base                
+00004850  __TI_Handler_Table_Limit               
+00004856  __TI_CINIT_Base                        
+00004866  __TI_CINIT_Limit                       
 0000a501  mpu_ctl0_value                         
 0000ffc6  __TI_int27                             
 0000ffc8  __TI_int28                             
@@ -3256,31 +3298,36 @@ address   name
 0000fffa  __TI_int53                             
 0000fffc  __TI_int54                             
 0000fffe  _reset_vector                          
-00010000  __TI_decompress_lzss                   
-00010076  initLCD                                
-000100de  __TI_auto_init_nobinit_nopinit_hold_wdt
-00010132  taskB                                  
-0001016c  taskA                                  
-000101a2  RTOSsetup                              
-000101d6  lcdWriteCmd                            
-00010204  main                                   
-00010232  __mpu_init                             
-0001025e  delay                                  
-00010284  RTOSinitTask                           
-000102a4  getLowNib                              
-000102c2  __mspabi_mpyi_f5hw                     
-000102da  memcpy                                 
-000102ee  __TI_decompress_none                   
-00010300  lcdTriggerEN                           
-0001030e  C$$EXIT                                
-0001030e  abort                                  
-00010314  _system_pre_init                       
-00010318  RTOSrun                                
-0001031a  _system_post_cinit                     
-0001031c  taskC                                  
+00010000  malloc                                 
+000100bc  __TI_decompress_lzss                   
+00010132  initLCD                                
+0001019a  __TI_auto_init_nobinit_nopinit_hold_wdt
+000101ee  RTOSsetup                              
+00010234  main                                   
+0001027a  minit                                  
+000102bc  taskB                                  
+000102f6  taskA                                  
+0001032c  lcdWriteCmd                            
+0001035a  __mpu_init                             
+00010386  delay                                  
+000103ac  __TI_zero_init_nomemset                
+000103d0  RTOSinitTask                           
+000103f0  getLowNib                              
+0001040e  __mspabi_mpyi_f5hw                     
+00010426  memcpy                                 
+0001043a  __TI_decompress_none                   
+0001044c  lcdTriggerEN                           
+0001045a  C$$EXIT                                
+0001045a  abort                                  
+00010460  _system_pre_init                       
+00010464  RTOSrun                                
+00010466  _nop                                   
+00010468  _system_post_cinit                     
+0001046a  scheduler                              
+0001046c  taskC                                  
 ffffffff  __TI_pprof_out_hndl                    
 ffffffff  __TI_prof_data_size                    
 ffffffff  __TI_prof_data_start                   
 ffffffff  __c_args__                             
 
-[1468 symbols]
+[1480 symbols]

@@ -13,6 +13,7 @@ ORDERED_OBJS += \
 "./RTOS.obj" \
 "./lcd.obj" \
 "./main.obj" \
+"./scheduler.obj" \
 "../lnk_msp430fr6989.cmd" \
 $(GEN_CMDS__FLAG) \
 -llibmpu_init.a \
@@ -158,8 +159,9 @@ Project5.hex: $(EXE_OUTPUTS)
 # Other Targets
 clean:
 	-$(RM) $(BIN_OUTPUTS__QUOTED)$(EXE_OUTPUTS__QUOTED)
-	-$(RM) "RTOS.obj" "lcd.obj" "main.obj" 
+	-$(RM) "RTOS.obj" "lcd.obj" "main.obj" "scheduler.obj" 
 	-$(RM) "RTOS.d" "lcd.d" "main.d" 
+	-$(RM) "scheduler.d" 
 	-@echo 'Finished clean'
 	-@echo ' '
 

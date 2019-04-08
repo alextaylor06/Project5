@@ -15,6 +15,10 @@ struct TCB
     unsigned int TCBLoc; //TCB Location
    // enum TaskState state;
 };
+
+unsigned myStack[256];
+unsigned* stackP = myStack+256;
+
 int taskId=1;
 void RTOSsetup(void){
     WDTCTL = WDTPW | WDTHOLD;   // stop watchdog timer
@@ -24,9 +28,10 @@ void RTOSsetup(void){
     P1OUT &= ~BIT0; // Red LED initially off
     P9OUT &= ~BIT7; // Green LED initially off
 
-    TA1CTL = 0x0210;    //Set TA0 to up mode, ACLK
-    TA1CCR1 = 3333;
-    TA1CCTL1 = 0x00E0;  //Set Output mode to set/reset
+
+    unsigned myStack=malloc(256*sizeof(unsigned));
+    unsigned* stackP = myStack+256;
+
 
 }
 
@@ -37,11 +42,9 @@ void RTOSinitTask(void (*pFun)(void)){
     pFunStruct.address = &pFun;
 
 
-
-
     taskId++;
 }
-void RTOSrun(void){
+int RTOSrun(void){
 
 
 }
