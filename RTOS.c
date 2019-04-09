@@ -6,6 +6,7 @@
  */
 
 #include <msp430.h>
+extern void scheduler(*unsigned, unsigned int, unsigned int);
 
 struct TCB
 {
@@ -15,6 +16,11 @@ struct TCB
     unsigned int TCBLoc; //TCB Location
    // enum TaskState state;
 };
+
+struct TCB *taskAp;
+struct TCB *taskBp;
+struct TCB *taskCp;
+
 
 unsigned myStack[256];
 unsigned* stackP = myStack+256;
@@ -36,16 +42,30 @@ void RTOSsetup(void){
 }
 
 void RTOSinitTask(void (*pFun)(void)){
-
-    struct TCB pFunStruct;
-    pFunStruct.id=taskId;
-    pFunStruct.address = &pFun;
-
+    struct TCB pFunStructA;
+    struct TCB pFunStructB;
+    struct TCB pFunStructC;
+    if(taskId==1) {
+        pFunStructA.id=taskId;
+        pFunStructA.address = &pFun;
+        taskAp= &pFunStructA;
+    }
+    else if(taskId==2) {
+        pFunStructB.id=taskId;
+        pFunStructB.address = &pFun;
+        taskBp= &pFunStructB;
+    }
+    else {
+        pFunStructC.id=taskId;
+        pFunStructC.address = &pFun;
+        taskCp= &pFunStructC;
+    }
 
     taskId++;
 }
 int RTOSrun(void){
-
+    scheduler(stackP,taskAp->address,taskBp->address);
+    while(1);
 
 }
 

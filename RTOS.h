@@ -11,6 +11,6 @@
 void RTOSsetup(void);
 void RTOSinitTask(void (*pFun)(void));
 int RTOSrun(void);
-
+int RTOSint(void)
 
 #endif /* RTOS_H_ */

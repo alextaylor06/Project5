@@ -14,7 +14,8 @@
       .global scheduler               ; Declare symbol to be exported
       .sect ".text"                  ; Code is relocatable
 scheduler:   .asmfunc
-
+	MOV R12,&MPY32L ; Load low word of 1st operand
 
 reti
+
 .endasmfunc
